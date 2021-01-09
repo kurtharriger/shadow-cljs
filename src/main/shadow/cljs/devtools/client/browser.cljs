@@ -21,7 +21,9 @@
       (js/console.log.apply js/console (into-array (into [(str "shadow-cljs: " msg)] args))))))
 
 (defn script-eval [code]
-  (js/goog.globalEval code))
+  (try
+    (js/goog.globalEval code)
+    (catch js/Error err (devtools-msg "script eval failed with err:" err))))
 
 (defn do-js-load [sources]
   (doseq [{:keys [resource-id output-name resource-name js] :as src} sources]
